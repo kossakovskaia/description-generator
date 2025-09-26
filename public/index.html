@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Description Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3f51b5;
+            /* Indigo */
+            --primary-dark-color: #303f9f;
+            --accent-color: #6c757d;
+            --background-color: #f5f5f5;
+            --surface-color: #ffffff;
+            --text-primary-color: #212121;
+            --text-secondary-color: #757575;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-primary-color);
+        }
+
+        #container {
+            width: 90%;
+            max-width: 800px;
+            background-color: var(--surface-color);
+            padding: 2.5em;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            text-align: center;
+            font-weight: 500;
+            margin-top: 0;
+            margin-bottom: 1.5em;
+        }
+
+        p {
+            color: var(--text-secondary-color);
+            text-align: center;
+            margin-top: 0;
+        }
+
+        textarea,
+        input[type="text"] {
+            width: 100%;
+            padding: 1em;
+            margin-bottom: 1.5em;
+            box-sizing: border-box;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1em;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        textarea:focus,
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 1em;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1em;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: var(--primary-dark-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        #generator-selection {
+            display: flex;
+            justify-content: space-between;
+            gap: 1em;
+            margin-bottom: 2em;
+        }
+
+        #generator-selection button {
+            width: 100%;
+            background-color: var(--surface-color);
+            color: var(--primary-color);
+            border: 1px solid var(--border-color);
+            box-shadow: none;
+        }
+
+        #generator-selection button:hover {
+            background-color: rgba(63, 81, 181, 0.05);
+            border-color: var(--primary-color);
+        }
+
+        #epic-generator-form,
+        #product-updates-form,
+        #jpd-idea-form {
+            display: none;
+        }
+
+        #add-epic-btn {
+            width: auto;
+            padding: 0.5em 1em;
+            background-color: var(--accent-color);
+            font-size: 0.9em;
+            margin-bottom: 1.5em;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        #output-wrapper {
+            position: relative;
+            margin-top: 2em;
+        }
+
+        #output {
+            white-space: pre-wrap;
+            background-color: var(--background-color);
+            padding: 1.5em;
+            border-radius: 8px;
+            min-height: 150px;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary-color);
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        #copy-btn {
+            display: none;
+            float: right;
+            margin-bottom: 0.5em;
+            cursor: pointer;
+            background-color: var(--accent-color);
+            border: none;
+            color: white;
+            padding: 0.5em 1em;
+            border-radius: 8px;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <h1>Description Generator</h1>
+
+        <div id="generator-selection">
+            <button id="select-epic-generator">Epic Description</button>
+            <button id="select-product-updates-generator">Product Updates</button>
+            <button id="select-jpd-idea-generator">JPD Idea</button>
+        </div>
+
+        <div id="epic-generator-form">
+            <textarea id="idea" placeholder="Enter your epic idea here..."></textarea>
+            <input type="text" id="organizations" placeholder="Affected Organizations (comma-separated)">
+            <input type="text" id="environments" placeholder="Affected Environments (comma-separated)">
+            <button id="generate-epic" class="primary-action">Generate Epic Description</button>
+        </div>
+
+        <div id="product-updates-form">
+            <div id="epics-container">
+                <div class="epic-input-group">
+                    <textarea class="epic-input" placeholder="Paste Epic 1 description here..."></textarea>
+                </div>
+            </div>
+            <button id="add-epic-btn">+ Add another epic</button>
+            <button id="generate-product-update" class="primary-action">Generate Product Update</button>
+        </div>
+
+        <div id="jpd-idea-form">
+            <textarea id="jpd-idea-input" placeholder="Enter a short idea or high-level description..."></textarea>
+            <button id="generate-jpd-idea" class="primary-action">Generate JPD Idea</button>
+        </div>
+
+        <div id="output-wrapper">
+            <button id="copy-btn">Copy</button>
+            <pre id="output"></pre>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+
+</html>
