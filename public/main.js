@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
-        await generate('/generate-epic', { idea, organizations, environments }, 'epic');
+        await generate('/api/generate-epic', { idea, organizations, environments }, 'epic');
     });
 
     // --- Product Updates Generator Logic ---
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        await generate('/generate-product-update', { epics }, 'productUpdate');
+        await generate('/api/generate-product-update', { epics }, 'productUpdate');
     });
 
     // --- JPD Idea Generator Logic ---
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
             outputDiv.textContent = 'Please enter an idea for the JPD.';
             return;
         }
-        await generate('/generate-jpd-idea', { idea }, 'jpdIdea');
+        await generate('/api/generate-jpd-idea', { idea }, 'jpdIdea');
     });
 
     // --- Common Generation & Display Logic ---

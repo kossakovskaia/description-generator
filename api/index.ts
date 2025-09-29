@@ -1,9 +1,9 @@
 import "dotenv/config";
 import express from 'express';
 import path from 'path';
-import { generateEpic } from './epic-generator.js';
-import { generateProductUpdate } from './product-updates-generator.js';
-import { generateJpdIdea } from './jpd-idea-generator.js';
+import { generateEpic } from '../src/epic-generator.js';
+import { generateProductUpdate } from '../src/product-updates-generator.js';
+import { generateJpdIdea } from '../src/jpd-idea-generator.js';
 
 const app = express();
 const port = 3000;
@@ -12,9 +12,10 @@ const port = 3000;
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 app.use(express.json());
+// Serve static files from the `public` directory, which is now at the root
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-app.post('/generate-epic', async (req, res) => {
+app.post('/api/generate-epic', async (req, res) => {
     const { idea, organizations, environments } = req.body;
 
     if (!idea) {
@@ -43,7 +44,7 @@ app.post('/generate-epic', async (req, res) => {
     }
 });
 
-app.post('/generate-product-update', async (req, res) => {
+app.post('/api/generate-product-update', async (req, res) => {
     const { epics } = req.body;
 
     if (!epics || !Array.isArray(epics) || epics.length === 0) {
@@ -59,7 +60,7 @@ app.post('/generate-product-update', async (req, res) => {
     }
 });
 
-app.post('/generate-jpd-idea', async (req, res) => {
+app.post('/api/generate-jpd-idea', async (req, res) => {
     const { idea } = req.body;
 
     if (!idea) {
@@ -75,6 +76,12 @@ app.post('/generate-jpd-idea', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
-});
+// For local development, the server needs to listen on a port.
+// Vercel will handle this automatically in production.
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, () => {
+        console.log(`Server is running at http://localhost:${port}`);
+    });
+}
+
+export default app;

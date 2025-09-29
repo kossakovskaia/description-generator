@@ -6,9 +6,9 @@
     "write-epic": "./dist/index.js"
   },
   "scripts": {
-    "build": "tsc -p .",
-    "dev": "tsx --watch src/server.ts",
-    "start": "node dist/server.js",
+    "build": "tsc -p . && cp -R public dist/",
+    "dev": "tsx --watch api/index.ts",
+    "start": "node dist/api/index.js",
     "cli": "tsx src/index.ts"
   },
   "keywords": [],
