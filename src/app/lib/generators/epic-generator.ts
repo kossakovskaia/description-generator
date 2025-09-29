@@ -73,7 +73,7 @@ export async function generateEpic(options: GenerateEpicOptions) {
   let parsed;
   try {
     parsed = JSON.parse(jsonRaw);
-  } catch (e) {
+  } catch {
     console.error("\n[warn] JSON parse failed; returning text epic only. Raw JSON was:\n", jsonRaw);
     return epicText;
   }

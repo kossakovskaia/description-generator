@@ -2,6 +2,12 @@
 
 import { useState } from "react";
 
+type EpicResult = 
+  | { type: 'error'; error: string }
+  | { type: 'text'; text: string }
+  | { type: 'full'; text: string; json: unknown }
+  | null;
+
 export default function EpicGenerator() {
   const [idea, setIdea] = useState("");
   const [overview, setOverview] = useState("");
@@ -9,7 +15,7 @@ export default function EpicGenerator() {
   const [environments, setEnvironments] = useState("");
   const [includeJson, setIncludeJson] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<EpicResult>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,12 +37,19 @@ export default function EpicGenerator() {
 
       const data = await response.json();
       if (response.ok) {
-        setResult(data.result);
+        const apiResult = data.result;
+        if (typeof apiResult === 'string') {
+          setResult({ type: 'text', text: apiResult });
+        } else if (apiResult.text && apiResult.json) {
+          setResult({ type: 'full', text: apiResult.text, json: apiResult.json });
+        } else {
+          setResult({ type: 'text', text: apiResult.text || apiResult });
+        }
       } else {
-        setResult({ error: data.error });
+        setResult({ type: 'error', error: data.error });
       }
-    } catch (error) {
-      setResult({ error: "Failed to generate epic" });
+    } catch {
+      setResult({ type: 'error', error: "Failed to generate epic" });
     } finally {
       setLoading(false);
     }
@@ -129,7 +142,7 @@ export default function EpicGenerator() {
 
       {result && (
         <div className="mt-6">
-          {result.error ? (
+          {result.type === 'error' ? (
             <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4">
               <p className="text-red-800 dark:text-red-300">{result.error}</p>
             </div>
@@ -140,10 +153,10 @@ export default function EpicGenerator() {
                   Generated Epic
                 </h3>
                 <pre className="whitespace-pre-wrap text-sm text-gray-800 dark:text-gray-200">
-                  {typeof result === "string" ? result : result.text}
+                  {result.text}
                 </pre>
               </div>
-              {result.json && (
+              {result.type === 'full' && (
                 <div className="bg-gray-50 dark:bg-gray-900 rounded-md p-4">
                   <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
                     JSON Output

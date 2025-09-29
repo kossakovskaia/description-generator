@@ -27,7 +27,7 @@ export default function JpdIdeaGenerator() {
       } else {
         setError(data.error);
       }
-    } catch (err) {
+    } catch {
       setError("Failed to generate JPD idea");
     } finally {
       setLoading(false);

@@ -32,7 +32,7 @@ export default function ProductUpdateGenerator() {
       } else {
         setError(data.error);
       }
-    } catch (err) {
+    } catch {
       setError("Failed to generate product update");
     } finally {
       setLoading(false);
