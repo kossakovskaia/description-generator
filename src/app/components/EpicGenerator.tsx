@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import CopyButton from "./CopyButton";
 
 type EpicResult = 
   | { type: 'error'; error: string }
@@ -149,18 +150,24 @@ export default function EpicGenerator() {
           ) : (
             <div className="space-y-4">
               <div className="bg-gray-50 dark:bg-gray-900 rounded-md p-4">
-                <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
-                  Generated Epic
-                </h3>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    Generated Epic
+                  </h3>
+                  <CopyButton text={result.text} />
+                </div>
                 <pre className="whitespace-pre-wrap text-sm text-gray-800 dark:text-gray-200">
                   {result.text}
                 </pre>
               </div>
               {result.type === 'full' && (
                 <div className="bg-gray-50 dark:bg-gray-900 rounded-md p-4">
-                  <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
-                    JSON Output
-                  </h3>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                      JSON Output
+                    </h3>
+                    <CopyButton text={JSON.stringify(result.json, null, 2)} />
+                  </div>
                   <pre className="whitespace-pre-wrap text-sm text-gray-800 dark:text-gray-200 overflow-x-auto">
                     {JSON.stringify(result.json, null, 2)}
                   </pre>

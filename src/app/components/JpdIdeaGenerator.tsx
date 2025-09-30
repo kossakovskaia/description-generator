@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import CopyButton from "./CopyButton";
 
 export default function JpdIdeaGenerator() {
   const [idea, setIdea] = useState("");
@@ -71,9 +72,12 @@ export default function JpdIdeaGenerator() {
 
       {result && (
         <div className="mt-6 bg-gray-50 dark:bg-gray-900 rounded-md p-4">
-          <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
-            Generated JPD Idea
-          </h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Generated JPD Idea
+            </h3>
+            <CopyButton text={result} />
+          </div>
           <pre className="whitespace-pre-wrap text-sm text-gray-800 dark:text-gray-200">
             {result}
           </pre>
